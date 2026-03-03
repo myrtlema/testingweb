@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chinese to English Translator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">中英翻譯器</h1>
+                <nav class="nav">
+                    <a href="#" class="nav-link active">翻譯</a>
+                    <a href="#" class="nav-link">關於</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="translator-container">
+                <!-- Input Section -->
+                <div class="translation-panel input-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">中文輸入</h2>
+                        <span class="char-count"><span id="inputCount">0</span> / 5000</span>
+                    </div>
+                    <textarea 
+                        id="inputText" 
+                        class="translation-input" 
+                        placeholder="請輸入要翻譯的中文文字..."
+                        maxlength="5000"
+                    ></textarea>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button id="translateBtn" class="btn btn-primary">
+                        <span class="btn-icon">→</span>
+                        翻譯
+                    </button>
+                    <button id="swapBtn" class="btn btn-secondary" title="交換">
+                        <span class="btn-icon">⇄</span>
+                    </button>
+                    <button id="clearBtn" class="btn btn-secondary" title="清除">
+                        <span class="btn-icon">✕</span>
+                    </button>
+                </div>
+
+                <!-- Output Section -->
+                <div class="translation-panel output-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">英文輸出</h2>
+                        <div class="output-actions">
+                            <span class="char-count"><span id="outputCount">0</span> 字元</span>
+                            <button id="copyBtn" class="btn-icon-only" title="複製">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <textarea 
+                        id="outputText" 
+                        class="translation-output" 
+                        placeholder="翻譯結果將顯示在這裡..."
+                        readonly
+                    ></textarea>
+                </div>
+            </div>
+
+            <!-- Status Messages -->
+            <div id="statusMessage" class="status-message hidden"></div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2026 Chinese to English Translator. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">翻譯中...</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
