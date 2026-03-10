@@ -3,95 +3,223 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chinese to English Translator</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <title>互動式實驗網站</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --success: #10b981;
+            --error: #ef4444;
+            --bg: #f8fafc;
+            --card: #ffffff;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* 功能 A: 開始表單樣式 */
+        #start-container {
+            background: var(--card);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        button.btn-start {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 100%;
+            transition: opacity 0.2s;
+        }
+
+        button:hover { opacity: 0.9; }
+
+        /* 主要互動區（預設隱藏） */
+        #main-content {
+            display: none;
+            text-align: center;
+        }
+
+        .game-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            border: 2px dashed #cbd5e1;
+        }
+
+        /* 功能 D: 狀態訊息 UI */
+        #status-toast {
+            position: fixed;
+            bottom: 20px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            color: white;
+            font-weight: 500;
+            transform: translateY(100px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        #status-toast.show { transform: translateY(0); }
+        .bg-success { background-color: var(--success); }
+        .bg-error { background-color: var(--error); }
+    </style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-content">
-                <h1 class="logo">中英翻譯器</h1>
-                <nav class="nav">
-                    <a href="#" class="nav-link active">翻譯</a>
-                    <a href="#" class="nav-link">關於</a>
-                </nav>
+
+    <!-- 功能 A: 資料收集表單 -->
+    <div id="start-container">
+        <h2>開始使用 Get Started</h2>
+        <form id="userForm">
+            <div class="form-group">
+                <label for="userName">姓名 Name</label>
+                <input type="text" id="userName" required placeholder="請輸入姓名">
             </div>
-        </header>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="translator-container">
-                <!-- Input Section -->
-                <div class="translation-panel input-panel">
-                    <div class="panel-header">
-                        <h2 class="panel-title">中文輸入</h2>
-                        <span class="char-count"><span id="inputCount">0</span> / 5000</span>
-                    </div>
-                    <textarea 
-                        id="inputText" 
-                        class="translation-input" 
-                        placeholder="請輸入要翻譯的中文文字..."
-                        maxlength="5000"
-                    ></textarea>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="action-buttons">
-                    <button id="translateBtn" class="btn btn-primary">
-                        <span class="btn-icon">→</span>
-                        翻譯
-                    </button>
-                    <button id="swapBtn" class="btn btn-secondary" title="交換">
-                        <span class="btn-icon">⇄</span>
-                    </button>
-                    <button id="clearBtn" class="btn btn-secondary" title="清除">
-                        <span class="btn-icon">✕</span>
-                    </button>
-                </div>
-
-                <!-- Output Section -->
-                <div class="translation-panel output-panel">
-                    <div class="panel-header">
-                        <h2 class="panel-title">英文輸出</h2>
-                        <div class="output-actions">
-                            <span class="char-count"><span id="outputCount">0</span> 字元</span>
-                            <button id="copyBtn" class="btn-icon-only" title="複製">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                    <textarea 
-                        id="outputText" 
-                        class="translation-output" 
-                        placeholder="翻譯結果將顯示在這裡..."
-                        readonly
-                    ></textarea>
-                </div>
+            <div class="form-group">
+                <label for="userEmail">Email</label>
+                <input type="email" id="userEmail" required placeholder="example@mail.com">
             </div>
-
-            <!-- Status Messages -->
-            <div id="statusMessage" class="status-message hidden"></div>
-        </main>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <p>&copy; 2026 Chinese to English Translator. All rights reserved.</p>
-        </footer>
+            <button type="submit" class="btn-start">開始 Start</button>
+        </form>
     </div>
 
-    <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="loading-overlay hidden">
-        <div class="loading-spinner"></div>
-        <p class="loading-text">翻譯中...</p>
+    <!-- 主要互動內容 -->
+    <div id="main-content">
+        <h1>實驗進行中...</h1>
+        <div class="game-box">
+            <p>點擊按鈕模擬操作行為</p>
+            <button onclick="triggerAction('A')">觸發事件 A</button>
+            <button onclick="triggerAction('B')">觸發事件 B</button>
+            <br><br>
+            <button onclick="finishExperiment()" style="background:#64748b; color:white; border:none; padding:5px 10px; border-radius:4px;">結束並送出總結</button>
+        </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- 功能 D: 狀態訊息區域 -->
+    <div id="status-toast"></div>
+
+    <script>
+        // 全域變數儲存使用者資訊
+        let currentUser = {
+            name: "",
+            email: ""
+        };
+
+        // 功能 A: 表單提交處理
+        document.getElementById('userForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // 儲存資料
+            currentUser.name = document.getElementById('userName').value;
+            currentUser.email = document.getElementById('userEmail').value;
+
+            // UI 切換
+            document.getElementById('start-container').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+
+            // 範例 1：記錄實驗開始
+            sendLog({ event: "experiment_start", timestamp: new Date().toISOString() });
+        });
+
+        // 功能 B: 送出記錄的 JavaScript 函數
+        async function sendLog(logData) {
+            // 如果 logData 是物件，轉成字串
+            const logString = typeof logData === 'object' ? JSON.stringify(logData) : logData;
+
+            const payload = {
+                name: currentUser.name,
+                email: currentUser.email,
+                log: logString
+            };
+
+            try {
+                const response = await fetch("/api/log", { // 相對路徑
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    showToast("記錄已儲存 Log saved", "success");
+                    return true;
+                } else {
+                    showToast("儲存失敗 Save failed", "error");
+                    return false;
+                }
+            } catch (error) {
+                console.error("Log fetch error:", error);
+                showToast("儲存失敗 Save failed", "error");
+                return false;
+            }
+        }
+
+        // 功能 C: 使用範例
+        function triggerAction(type) {
+            console.log(`Action ${type} triggered`);
+            // 範例 2：記錄中間操作
+            sendLog({ 
+                event: "user_action", 
+                action_type: type, 
+                time: new Date().toLocaleTimeString() 
+            });
+        }
+
+        function finishExperiment() {
+            // 範例 3：記錄總結數據
+            sendLog({ 
+                event: "experiment_complete", 
+                final_score: Math.floor(Math.random() * 100), 
+                summary: "User finished all trials" 
+            });
+            alert("實驗已完成，數據已送出！");
+        }
+
+        // 功能 D: UI 回饋顯示
+        function showToast(message, type) {
+            const toast = document.getElementById('status-toast');
+            toast.textContent = message;
+            toast.className = type === 'success' ? 'bg-success show' : 'bg-error show';
+
+            const duration = type === 'success' ? 3000 : 5000;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, duration);
+        }
+    </script>
 </body>
 </html>
